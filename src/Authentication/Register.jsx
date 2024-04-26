@@ -4,14 +4,16 @@ import { AuthContext } from "../Auth/AuthProvider";
 import { ToastContainer, toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const Register = () => {
     const [show, setShow] = useState(true);
     const { createUser } = useContext(AuthContext);
 
-    const handleCreateUser = (e) => {
+    const handleCreateUser = async (e) => {
         e.preventDefault();
         const form = e.target;
+        const name = form.name.value;
         const email = form.email.value;
         const password = form.password.value;
 
@@ -24,10 +26,27 @@ const Register = () => {
         }
 
         createUser(email, password)
-            .then((result) => {
-                console.log(result.user);
-                form.reset();
-                toast("Create user successful");
+            .then(async (result) => {
+                //TODO: call database
+
+                const { data } = await axios.post(
+                    "http://localhost:5000/users",
+
+                    {
+                        name,
+                        email,
+                        creationTime: result.user?.metadata.creationTime,
+                    },
+                    {
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                    }
+                );
+                if (data.acknowledged) {
+                    form.reset();
+                    toast("Create user successful");
+                }
             })
             .catch((err) => {
                 console.log(err.message);
@@ -43,6 +62,18 @@ const Register = () => {
                 </div>
                 <div className="card shrink-0 w-full max-w-md  bg-base-100">
                     <form onSubmit={handleCreateUser} className="card-body">
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Name</span>
+                            </label>
+                            <input
+                                name="name"
+                                type="name"
+                                placeholder="name"
+                                className="input input-bordered"
+                                required
+                            />
+                        </div>
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Email</span>

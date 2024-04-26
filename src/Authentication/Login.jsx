@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../Auth/AuthProvider";
 import { useContext, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
@@ -79,7 +79,7 @@ const Login = () => {
                             <button className="btn btn-primary">Login</button>
                         </div>
                         <div className="flex items-center">
-                            <p>Do'nt have Account </p>
+                            <p>Have No Account </p>
                             <Link className="btn btn-link" to={"/register"}>
                                 register
                             </Link>
@@ -87,7 +87,6 @@ const Login = () => {
                     </form>
                 </div>
             </div>
-            <ToastContainer />
         </div>
     );
 };

@@ -3,6 +3,8 @@ import Root from "../Components/Root";
 import Error from "../Pages/Error";
 import Register from "../Authentication/Register";
 import Login from "../Authentication/Login";
+import Users from "../Pages/Users";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
     {
@@ -22,10 +24,19 @@ const router = createBrowserRouter([
                 element: <Register />,
             },
             {
-                path: "/",
+                path: "/user",
+                element: (
+                    <PrivateRoute>
+                        <Users />
+                    </PrivateRoute>
+                ),
+                loader: () => fetch("http://localhost:5000/users"),
             },
             {
-                path: "/",
+                path: "/dashboard",
+            },
+            {
+                path: "/addProduct",
             },
         ],
     },
