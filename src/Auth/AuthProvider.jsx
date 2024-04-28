@@ -1,5 +1,6 @@
 import {
     createUserWithEmailAndPassword,
+    deleteUser,
     onAuthStateChanged,
     signInWithEmailAndPassword,
     signOut,
@@ -26,12 +27,15 @@ const AuthProvider = ({ children }) => {
     const logoutUser = () => {
         return signOut(auth);
     };
+    const delUser = () => {
+        return deleteUser(auth.currentUser);
+    };
 
     useEffect(() => {
-        const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unSubscribe = onAuthStateChanged(auth, (currentUsers) => {
             setLoading(false);
-            console.log("user in the auth change", currentUser);
-            setUser(currentUser);
+            console.log("user in the auth change", currentUsers);
+            setUser(currentUsers);
         });
         return () => {
             unSubscribe();
@@ -44,6 +48,7 @@ const AuthProvider = ({ children }) => {
         loginUser,
         loading,
         logoutUser,
+        delUser,
     };
 
     return (

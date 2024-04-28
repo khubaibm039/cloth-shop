@@ -1,12 +1,25 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../Auth/AuthProvider";
 import { CgProfile } from "react-icons/cg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IoMdClose } from "react-icons/io";
 
 const Navbar = () => {
     const { user, logoutUser } = useContext(AuthContext);
+
+    const [theme, setTheme] = useState(
+        localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
+    );
+
+    const handleToggle = (e) => {
+        if (e.target.checked) {
+            setTheme("dark");
+        } else {
+            setTheme("light");
+        }
+    };
 
     const handleSingOut = () => {
         logoutUser()
@@ -56,6 +69,12 @@ const Navbar = () => {
             </li>{" "}
         </>
     );
+
+    useEffect(() => {
+        localStorage.setItem("theme", theme);
+        const localTheme = localStorage.getItem("theme");
+        document.querySelector("html").setAttribute("data-theme", localTheme);
+    }, [theme]);
     return (
         <div>
             <div className="navbar bg-base-100">
@@ -100,6 +119,7 @@ const Navbar = () => {
                     <label className="swap swap-rotate mr-2">
                         {/* this hidden checkbox controls the state */}
                         <input
+                            onChange={handleToggle}
                             type="checkbox"
                             className="theme-controller"
                             value="synthwave"
@@ -123,23 +143,53 @@ const Navbar = () => {
                         </svg>
                     </label>
                     {user ? (
-                        <div className="flex items-center ">
-                            <details className="dropdown dropdown-end relative ">
-                                <summary className="btn p-0 h-0 bg-white border shadow-white border-white hover:bg-white hover:border-white">
-                                    <CgProfile className="text-3xl"></CgProfile>
-                                </summary>
-                                <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-36 h-[88vh] justify-between">
-                                    <div className="h-[calc(100% - 100px)] gap-2 grid">
-                                        {profile}
-                                    </div>
-                                    <button
-                                        className="btn"
-                                        onClick={handleSingOut}
+                        <div>
+                            <div className="drawer drawer-end z-50">
+                                <input
+                                    id="my-drawer-4"
+                                    type="checkbox"
+                                    className="drawer-toggle"
+                                />
+                                <div className="drawer-content">
+                                    {/* Page content here */}
+                                    <label
+                                        htmlFor="my-drawer-4"
+                                        className="drawer-button  "
                                     >
-                                        SIGNOUT
-                                    </button>
-                                </ul>
-                            </details>
+                                        <CgProfile className="text-3xl"></CgProfile>
+                                    </label>
+                                </div>
+                                <div className="drawer-side">
+                                    <label
+                                        htmlFor="my-drawer-4"
+                                        aria-label="close sidebar"
+                                        className="drawer-overlay "
+                                    ></label>
+                                    <ul className="menu p-4 justify-between w-80 min-h-full bg-base-200 text-base-content">
+                                        {/* Sidebar content here */}
+                                        <div>
+                                            {" "}
+                                            <div className="m-4 mt-2 flex justify-between items-center">
+                                                <CgProfile className="text-3xl"></CgProfile>
+                                                <label
+                                                    htmlFor="my-drawer-4"
+                                                    aria-label="close sidebar"
+                                                    className="drawer-overlay "
+                                                >
+                                                    <IoMdClose className="text-3xl cursor-pointer"></IoMdClose>
+                                                </label>
+                                            </div>
+                                            {profile}
+                                        </div>{" "}
+                                        <button
+                                            className="btn"
+                                            onClick={handleSingOut}
+                                        >
+                                            SIGNOUT
+                                        </button>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     ) : (
                         <div className="flex gap-2">
@@ -158,3 +208,23 @@ const Navbar = () => {
 };
 
 export default Navbar;
+{
+    /*  <div className="flex items-center ">
+                            <details className="dropdown dropdown-end relative ">
+                                <summary className="btn p-0 h-0 bg-white border shadow-white border-white hover:bg-white hover:border-white">
+                                    <CgProfile className="text-3xl"></CgProfile>
+                                </summary>
+                                <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-36 h-[88vh] justify-between">
+                                    <div className="h-[calc(100% - 100px)] gap-2 grid">
+                                        {profile}
+                                    </div>
+                                    <button
+                                        className="btn"
+                                        onClick={handleSingOut}
+                                    >
+                                        SIGNOUT
+                                    </button>
+                                </ul>
+                            </details>
+                        </div> */
+}

@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Auth/AuthProvider";
 import { ToastContainer, toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -9,6 +9,7 @@ import axios from "axios";
 const Register = () => {
     const [show, setShow] = useState(true);
     const { createUser } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleCreateUser = async (e) => {
         e.preventDefault();
@@ -44,6 +45,7 @@ const Register = () => {
                     }
                 );
                 if (data.acknowledged) {
+                    navigate("/");
                     form.reset();
                     toast("Create user successful");
                 }

@@ -5,6 +5,7 @@ import Register from "../Authentication/Register";
 import Login from "../Authentication/Login";
 import Users from "../Pages/Users";
 import PrivateRoute from "./PrivateRoute";
+import AddProduct from "../Pages/AddProduct";
 
 const router = createBrowserRouter([
     {
@@ -37,6 +38,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/addProduct",
+                element: (
+                    <PrivateRoute>
+                        <AddProduct />
+                    </PrivateRoute>
+                ),
             },
         ],
     },
